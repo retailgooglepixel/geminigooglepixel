@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telekom x Pixel 10 Training</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --t-magenta: #E20074;
+      --t-grey: #4B4B4B;
+      --t-grey-medium: #757575; /* Neues Mittelgrau */
+      --g-blue: #4285F4;
+      --g-red: #EA4335;
+      --g-yellow: #FBBC05;
+      --g-green: #34A853;
+      --bg-color: #F8F9FA;
+      --card-radius: 24px;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--bg-color);
+      color: #191919;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- Header --- */
+    header {
+      background: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-area {
+      display: flex;
+      flex-direction: column; /* Text untereinander */
+      justify-content: center;
+    }
+
+    .brand-headline {
+      font-weight: 900;
+      font-size: 1.4rem;
+      line-height: 1.1;
+      color: var(--t-grey); /* Standardfarbe für "trifft" */
+    }
+
+    .brand-subline {
+      font-size: 0.85rem;
+      color: var(--t-grey-medium); /* Mittleres Grau für Gemini Ära */
+      font-weight: 400;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .pixel-badge {
+      background: #f1f3f4;
+      color: var(--t-grey);
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 500;
+      white-space: nowrap; /* Verhindert Umbruch */
+    }
+
+    /* --- Hero Section --- */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(180deg, #ffffff 0%, var(--bg-color) 100%);
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin: 0;
+      color: var(--t-grey);
+      line-height: 1.2;
+    }
+
+    .hero span {
+      color: var(--t-magenta);
+      display: block;
+      font-weight: 900;
+      font-size: 4rem;
+      background: -webkit-linear-gradient(45deg, var(--t-magenta), #ff6bbd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #666;
+    }
+
+    /* --- Content Grid --- */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: var(--t-grey);
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+    }
+
+    /* --- Accordion Cards --- */
+    .card {
+      background: white;
+      border-radius: var(--card-radius);
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid transparent;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+
+    /* Google Colors Decoration */
+    .card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover::before, .card.active::before { opacity: 1; }
+    .card:nth-child(4n+1)::before { background: var(--g-blue); }
+    .card:nth-child(4n+2)::before { background: var(--g-red); }
+    .card:nth-child(4n+3)::before { background: var(--g-yellow); }
+    .card:nth-child(4n+4)::before { background: var(--g-green); }
+
+    .card-header {
+      padding: 24px;
+      font-weight: 500;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-icon {
+      color: var(--t-magenta);
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+
+    .card.active .toggle-icon {
+      transform: rotate(45deg);
+    }
+
+    .card-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 24px;
+      color: #555;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .card.active .card-body {
+      padding-bottom: 24px;
+    }
+
+    .answer-tag {
+      display: inline-block;
+      background: #f0f0f0;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    a { color: var(--t-magenta); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+
+    /* Styling für die detaillierten Listen */
+    .detail-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .detail-list li {
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+    .detail-list li:last-child { border-bottom: none; }
+    .detail-title {
+      font-weight: 700;
+      color: var(--t-grey);
+      display: block;
+      margin-bottom: 5px;
+    }
+    .example-box {
+      background: #f4f7fc;
+      border-left: 3px solid var(--g-blue);
+      padding: 10px;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      border-radius: 0 8px 8px 0;
+      color: #444;
+    }
+
+    .btn-link {
+      display: inline-block;
+      background-color: var(--t-magenta);
+      color: white !important;
+      padding: 10px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .btn-link:hover {
+      background-color: #b0005a;
+      text-decoration: none;
+    }
+
+    /* --- Feedback Section --- */
+    .feedback-section {
+      background: white;
+      border-radius: var(--card-radius);
+      padding: 40px;
+      margin-top: 80px;
+      margin-bottom: 60px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(226, 0, 116, 0.1); /* Magenta glow */
+      border: 1px solid rgba(226, 0, 116, 0.2);
+    }
+
+    .rating-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .rating-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .rating-option:hover { transform: scale(1.1); }
+
+    .rating-option input { display: none; }
+
+    .emoji-label {
+      font-size: 2.5rem;
+      opacity: 0.5;
+      filter: grayscale(100%);
+      transition: all 0.3s;
+    }
+
+    .rating-option input:checked + .emoji-label {
+      opacity: 1;
+      transform: scale(1.2);
+      filter: grayscale(0%);
+    }
+
+    .rating-text {
+      font-size: 0.8rem;
+      margin-top: 5px;
+      color: var(--t-grey);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-family: 'Roboto', sans-serif;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--t-magenta);
+      box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.1);
+    }
+
+    .btn-submit {
+      background-color: var(--t-magenta);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+      background-color: #b0005a;
+      box-shadow: 0 5px 15px rgba(226, 0, 116, 0.3);
+    }
+
+    .prompt-chip {
+      background: #E8F0FE;
+      color: var(--g-blue);
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 5px;
+      font-size: 0.9rem;
+      border: 1px solid transparent;
+    }
+    .prompt-chip:hover {
+      border-color: var(--g-blue);
+      background: white;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-area">
+      <div class="brand-headline">
+        <span style="color: var(--t-magenta);">Premium</span> trifft <span style="color: var(--t-magenta);">Premium</span>
+      </div>
+      <div class="brand-subline">
+        Gemini Ära mit Google Pixel
+      </div>
+    </div>
+    <div class="pixel-badge">Pixel 10 & Gemini</div>
+  </header>
+
+  <div class="hero">
+    <h1>Pixel 10 Training<br><span>Bonn 2025</span></h1>
+    <p class="subtitle">Erlebe Spektakuläres jeden Tag.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- SECTION 1: Strategie & Markt -->
+    <div class="section-title"><span class="section-icon">🌍</span> Strategie & Markt</div>
+    
+    <div class="card">
+      <div class="card-header">Warum gibt es keinen Einheits-Bot für alle Androiden? <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Marktstrategie</span>
+        <p>Differenzierung ist der Schlüssel. Zwar nutzen viele OEMs (wie Samsung mit Galaxy AI) Googles <strong>Gemini-Modelle</strong> im Hintergrund, aber jeder Hersteller möchte ein eigenes Nutzererlebnis schaffen. Google differenziert das Pixel 10 durch die tiefste Integration: Gemini ist hier direkt in den <strong>Tensor G5 Chip</strong> und das System (Overlay) eingebaut, nicht nur eine App.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Detailvergleich: Gemini vs. Perplexity, ChatGPT & Co <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Wettbewerb & Abgrenzung</span>
+        <ul class="detail-list">
+          <li>
+            <span class="detail-title">🤖 Gemini vs. Perplexity</span>
+            Perplexity ist eine exzellente <strong>"Antwort-Maschine"</strong> (Such-Aggregator), die stark darin ist, Quellen aus dem Web zusammenzufassen. Gemini auf dem Pixel 10 ist mehr als das: Es ist ein <strong>"Kreativ- und System-Partner"</strong>. Perplexity kann nicht deine Apps steuern, Termine in deinen Kalender eintragen oder deine lokalen Fotos bearbeiten. Gemini kann beides: Suchen und Handeln.
+          </li>
+          <li>
+            <span class="detail-title">🤖 Gemini vs. ChatGPT</span>
+            ChatGPT ist stark im Chat, aber meist isoliert. Gemini ist ein <strong>"System-Agent"</strong>, der tief in deine Google Apps greift ("Finde die PDF in meinen Mails").
+          </li>
+          <li>
+            <span class="detail-title">🍎 Gemini vs. Apple Intelligence</span>
+            Apple nutzt für schwierige Fragen oft ChatGPT. <strong>Gemini Nano</strong> (Pixel 10) verarbeitet Daten lokal für Datenschutz, nutzt aber nahtlos die Cloud für komplexes Weltwissen – alles aus einer Hand.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Datenquellen & Hintergrundsysteme <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Deep Dive</span>
+        <p><strong>Woher kommt das Wissen?</strong><br>
+        Gemini wurde "multimodal" trainiert – das heißt, es hat nicht nur Texte gelesen, sondern gleichzeitig Videos geschaut, Code analysiert und Bilder betrachtet. Die Datenquellen sind öffentliche Web-Daten, lizenzierte Inhalte (Bücher, Medien) und wissenschaftliche Datensätze.</p>
+        
+        <p><strong>Die Hardware dahinter:</strong><br>
+        Das Training läuft auf Googles eigenen Supercomputern (TPU v6). Auf dem Pixel 10 läuft eine effiziente Version ("Nano") direkt auf dem <strong>Tensor G5 Chip</strong>.</p>
+        
+        <p><strong>Datenschutz:</strong><br>
+        Deine privaten Daten in Workspace (Docs, Sheets, Drive) werden <strong>nicht</strong> verwendet, um das öffentliche Gemini-Modell zu trainieren.</p>
+        
+        <a href="https://gemini.google/about/" target="_blank" class="btn-link">Mehr Infos & Whitepaper ansehen →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Was sind die USPs von Gemini auf dem Pixel 10? <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Selling Point</span>
+        <p>1. <strong>Multimodalität:</strong> Zeige der Kamera deinen Kühlschrank und frage nach Rezepten (Gemini Live).<br>
+        2. <strong>Integration:</strong> "Finde das PDF in meinen Mails und fasse es zusammen."<br>
+        3. <strong>On-Device AI:</strong> Dank <strong>Gemini Nano</strong> und Tensor G5 laufen sensible Aufgaben (wie Anruferkennung) direkt auf dem Gerät – privat und ohne Internet.</p>
+      </div>
+    </div>
+
+    <!-- SECTION 2: Praxis & Job -->
+    <div class="section-title"><span class="section-icon">💼</span> Gemini im Job-Alltag</div>
+
+    <div class="card">
+      <div class="card-header">Konkrete Anwendungsbeispiele für dich & Kunden <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Use Cases</span>
+        <p>Wie Gemini den Arbeitsalltag bei der Telekom oder bei B2B-Kunden erleichtert:</p>
+        
+        <ul class="detail-list">
+          <li>
+            <span class="detail-title">✍️ Texte verfassen (Vertrieb & Service)</span>
+            Spart Zeit bei schwierigen E-Mails.
+            <div class="example-box">
+              <em>Prompt:</em> "Antworte auf diese Beschwerde-Mail eines Geschäftskunden, dessen Glasfaser-Anschluss verzögert ist. Sei höflich, erkläre, dass es an Tiefbauarbeiten liegt, und biete als Entschuldigung ein Daten-Upgrade für seine Mobilfunkkarten an."
+            </div>
+          </li>
+          
+          <li>
+            <span class="detail-title">🎨 Bilder erstellen (Visualisierung)</span>
+            Hilft B2B-Kunden oder im Marketing, Ideen sichtbar zu machen.
+            <div class="example-box">
+               <em>Prompt:</em> "Erstelle ein fotorealistisches Bild eines modernen Telekom-Shops im Jahr 2030, mit viel Magenta-Licht, Robotern und glücklichen Kunden, 16:9 Format."
+            </div>
+          </li>
+
+          <li>
+            <span class="detail-title">📊 Programmieren & Excel (Shop Management)</span>
+            Ideal für Shop-Leiter, die Auswertungen machen müssen.
+            <div class="example-box">
+               <em>Prompt:</em> "Ich habe eine Google Tabelle mit Spalte A (Produkt) und Spalte B (Umsatz). Schreibe mir eine Formel, die den Gesamtumsatz nur für Produkte berechnet, die das Wort 'Pixel' enthalten."
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Technik & Abos -->
+    <div class="section-title"><span class="section-icon">💎</span> Abos & Technik</div>
+
+    <div class="card">
+      <div class="card-header">Gemini Varianten & Aktivierung (Update: 3.0) <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Up-Selling</span>
+        <p><strong>Gemini (Basic):</strong> Kostenlos. Modell: Gemini Flash. Gut für schnelle Antworten.<br>
+        <strong>Gemini AI Pro:</strong> Teil des "Google One AI Premium" Abos (ca. 22€/Monat).<br>
+        Enthält jetzt das brandneue <strong>Gemini 3.0</strong> (noch klüger, schneller und mit riesigem Kontextfenster) + Integration in Docs/Gmail + 2TB Speicher.<br>
+        <br>
+        <em>Aktivierung:</em> Einfach über die Google One App. Käufer des Pixel 10 Pro erhalten oft <strong>1 Jahr Google AI Premium kostenlos</strong> zum Testen.</p>
+        <p><a href="https://gemini.google/subscriptions/" target="_blank">Mehr zu den Abos ansehen →</a></p>
+      </div>
+    </div>
+
+    <!-- SECTION 4: Playground & Wünsche -->
+    <div class="section-title"><span class="section-icon">🎨</span> Playground</div>
+
+    <div class="card">
+      <div class="card-header">Rechtliches bei Bildern (z.B. "Banana" Tools) <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Legal</span>
+        <p>Generierte Bilder sind meist nicht urheberrechtlich geschützt. Aber Achtung bei <strong>Persönlichkeitsrechten</strong>: Erstelle keine Bilder von echten Personen/Promis ohne Erlaubnis (Deepfakes). Google setzt Wasserzeichen (SynthID), um KI-Bilder zu markieren.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Wie "prompte" ich richtig? (Der perfekte Telekom-Prompt) <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Best Practice</span>
+        <p>Die Zauberformel: <strong>Rolle + Aufgabe + Kontext + Format</strong>.</p>
+        <div style="background:#fff0f8; padding:15px; border-radius:12px; border-left: 5px solid var(--t-magenta); margin:15px 0; font-style:italic; color:#333; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+           "Du bist ein <strong>Telekom-Techniker</strong>, der aber heimlich ein leidenschaftlicher <strong>Shakespeare-Schauspieler</strong> ist (Rolle). <br><br>
+           Erkläre einem skeptischen Kunden, warum das <strong>Pixel 10</strong> dank 5G und Gemini viel besser ist als sein alter Router (Aufgabe). <br><br>
+           Benutze eine <strong>dramatische, altertümliche Sprache</strong> ('Oh, welch Geschwindigkeit!'), erwähne die Farbe <strong>Magenta</strong> als 'Licht der Hoffnung' (Kontext). <br><br>
+           Beende deine Rede mit einem kurzen, coolen <strong>Rap über Glasfaser</strong> (Format)."
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Foto zum Leben erwecken (Nano + Banana Demo) <div class="toggle-icon">+</div></div>
+      <div class="card-body">
+        <span class="answer-tag">Magic Editor & Reimagine</span>
+        <p>Das "Banana"-Beispiel zeigt die Macht der lokalen KI (Nano) kombiniert mit der Cloud. </p>
+        <p><strong>Live-Demo Anleitung:</strong></p>
+        <ol style="margin-bottom:15px; padding-left:20px;">
+          <li>Öffne ein Foto, auf dem eine echte Banane zu sehen ist.</li>
+          <li>Tippe auf "Magic Editor" (unten links) und markiere die Banane.</li>
+          <li>Wähle "Reimagine" (Neu Erfinden).</li>
+        </ol>
+        
+        <div style="background:#f4f7fc; padding:15px; border-radius:8px; border:1px dashed var(--g-blue);">
+          <strong>Der Prompt:</strong><br>
+          "Verwandle die Banane in eine antike Porzellan-Figur einer Banane mit feinem Goldrand und Rissen in der Glasur."
+        </div>
+        <p style="margin-top:10px; font-size:0.9rem; color:#666;">
+          Die KI berechnet Licht, Schatten und Perspektive neu, sodass es zu 100% realistisch aussieht.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Feedback -->
+    <div class="feedback-section">
+      <h2 style="color:var(--t-magenta); margin-bottom:10px;">Dein Feedback zählt!</h2>
+      <p>Wie fandest du das Training heute?</p>
+
+      <form id="feedbackForm">
+        <div class="rating-container">
+          <label class="rating-option">
+            <input type="radio" name="rating" value="1" required>
+            <span class="emoji-label">🤩</span>
+            <span class="rating-text">Sehr gut</span>
+          </label>
+          <label class="rating-option">
+            <input type="radio" name="rating" value="2">
+            <span class="emoji-label">🙂</span>
+            <span class="rating-text">Gut</span>
+          </label>
+          <label class="rating-option">
+            <input type="radio" name="rating" value="3">
+            <span class="emoji-label">😐</span>
+            <span class="rating-text">Okay</span>
+          </label>
+          <label class="rating-option">
+            <input type="radio" name="rating" value="4">
+            <span class="emoji-label">😕</span>
+            <span class="rating-text">Naja</span>
+          </label>
+          <label class="rating-option">
+            <input type="radio" name="rating" value="5">
+            <span class="emoji-label">🍏</span>
+            <span class="rating-text">Bleibe bei Apple</span>
+          </label>
+        </div>
+
+        <textarea name="feedback" placeholder="Deine Wünsche, Fragen oder Anregungen... (Gerne auch Emojis 🎉)"></textarea>
+        
+        <button type="submit" class="btn-submit">Feedback senden</button>
+      </form>
+      <div id="successMessage" style="display:none; margin-top:20px; color:var(--g-green); font-weight:bold; font-size:1.2rem;">
+        Danke! Dein Feedback ist angekommen. 🎉
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ============================================================
+    // DEINE WEB APP URL IST HIER EINGEFÜGT:
+    // ============================================================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwj3mQ8HnchkdC_O-yWSH-ojqtOY6vF_7bA7wXz6D5VnIxeXyOaiz9zO7cvHHUua2h_/exec'; 
+    // ============================================================
+
+
+    // Accordion Logic
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Prevent opening accordion if a link button was clicked
+        if (e.target.classList.contains('btn-link')) return;
+
+        const body = card.querySelector('.card-body');
+        card.classList.toggle('active');
+        
+        if (card.classList.contains('active')) {
+          body.style.maxHeight = body.scrollHeight + "px";
+        } else {
+          body.style.maxHeight = 0;
+        }
+      });
+    });
+
+    // Form Submission Logic for External Hosting (GitHub)
+    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const btn = this.querySelector('.btn-submit');
+      const originalText = btn.innerText;
+      btn.innerText = 'Sende...';
+      btn.disabled = true;
+
+      const formData = {
+        rating: this.rating.value,
+        feedback: this.feedback.value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', 
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        // Da wir 'no-cors' nutzen, gehen wir davon aus, dass es geklappt hat,
+        // wenn kein Netzwerkfehler auftritt.
+        document.getElementById('feedbackForm').style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        btn.innerText = 'Fehler. Bitte erneut versuchen.';
+        btn.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
