@@ -9,7 +9,7 @@
     :root {
       --t-magenta: #E20074;
       --t-grey: #4B4B4B;
-      --t-grey-medium: #757575; /* Neues Mittelgrau */
+      --t-grey-medium: #757575;
       --g-blue: #4285F4;
       --g-red: #EA4335;
       --g-yellow: #FBBC05;
@@ -43,7 +43,7 @@
 
     .brand-area {
       display: flex;
-      flex-direction: column; /* Text untereinander */
+      flex-direction: column;
       justify-content: center;
     }
 
@@ -51,12 +51,12 @@
       font-weight: 900;
       font-size: 1.4rem;
       line-height: 1.1;
-      color: var(--t-grey); /* Standardfarbe für "trifft" */
+      color: var(--t-grey);
     }
 
     .brand-subline {
       font-size: 0.85rem;
-      color: var(--t-grey-medium); /* Mittleres Grau für Gemini Ära */
+      color: var(--t-grey-medium);
       font-weight: 400;
       margin-top: 2px;
       letter-spacing: 0.5px;
@@ -69,14 +69,16 @@
       padding: 4px 12px;
       border-radius: 20px;
       font-weight: 500;
-      white-space: nowrap; /* Verhindert Umbruch */
+      white-space: nowrap;
     }
 
-    /* --- Hero Section --- */
+    /* --- Hero Section (mit Bildern) --- */
     .hero {
       text-align: center;
       padding: 80px 20px;
       background: linear-gradient(180deg, #ffffff 0%, var(--bg-color) 100%);
+      position: relative; 
+      overflow: hidden;   
     }
 
     h1 {
@@ -84,6 +86,8 @@
       margin: 0;
       color: var(--t-grey);
       line-height: 1.2;
+      position: relative;
+      z-index: 2; /* Text über den Bildern */
     }
 
     .hero span {
@@ -100,6 +104,52 @@
       margin-top: 20px;
       font-size: 1.2rem;
       color: #666;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Dekorative Bilder */
+    .hero-img {
+      position: absolute;
+      z-index: 1; /* Hinter dem Text */
+      width: auto;
+      pointer-events: none; /* Klicks gehen durch */
+      transition: all 0.3s ease;
+    }
+
+    .hero-img-left {
+      left: 5%; 
+      bottom: 0;
+      max-height: 350px;
+      max-width: 25vw;
+    }
+
+    /* RECHTES BILD: Größe erhöht, Position gesenkt */
+    .hero-img-right {
+      right: 5%; 
+      bottom: -180px;    /* Stark nach unten gezogen für die Balance */
+      max-height: 750px; /* +50% Größe (vorher 500px) */
+      max-width: 65vw;   
+    }
+
+    /* Mobile Anpassung für Bilder */
+    @media (max-width: 768px) {
+      .hero-img {
+        opacity: 0.25; 
+      }
+      .hero-img-left { 
+        left: -10px; 
+        max-height: 220px;
+        bottom: 0;
+      }
+      .hero-img-right { 
+        right: -50px; 
+        bottom: -50px;
+        max-height: 400px; /* Auch mobil etwas größer */
+        max-width: 60vw;
+      }
+      
+      .hero span { font-size: 3rem; }
     }
 
     /* --- Content Grid --- */
@@ -107,6 +157,8 @@
       max-width: 900px;
       margin: 0 auto;
       padding: 20px;
+      position: relative;
+      z-index: 2;
     }
 
     .section-title {
@@ -141,7 +193,6 @@
       box-shadow: 0 10px 20px rgba(0,0,0,0.08);
     }
 
-    /* Google Colors Decoration */
     .card::before {
       content: '';
       position: absolute;
@@ -206,7 +257,6 @@
     a { color: var(--t-magenta); text-decoration: none; font-weight: 500; }
     a:hover { text-decoration: underline; }
 
-    /* Styling für die detaillierten Listen */
     .detail-list {
       list-style: none;
       padding: 0;
@@ -251,7 +301,6 @@
       text-decoration: none;
     }
 
-    /* --- Feedback Section --- */
     .feedback-section {
       background: white;
       border-radius: var(--card-radius);
@@ -259,7 +308,7 @@
       margin-top: 80px;
       margin-bottom: 60px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(226, 0, 116, 0.1); /* Magenta glow */
+      box-shadow: 0 10px 30px rgba(226, 0, 116, 0.1);
       border: 1px solid rgba(226, 0, 116, 0.2);
     }
 
@@ -280,7 +329,6 @@
     }
 
     .rating-option:hover { transform: scale(1.1); }
-
     .rating-option input { display: none; }
 
     .emoji-label {
@@ -351,7 +399,6 @@
       border-color: var(--g-blue);
       background: white;
     }
-
   </style>
 </head>
 <body>
@@ -369,6 +416,12 @@
   </header>
 
   <div class="hero">
+    <!-- BILD LINKS -->
+    <img src="https://i.postimg.cc/Dwd1VwJD/image-from-rawpixel-id-6167453-png.png" alt="Abstract Left" class="hero-img hero-img-left">
+    
+    <!-- BILD RECHTS (Stark Vergrößert & Tiefer) -->
+    <img src="https://i.postimg.cc/hGz9hW2s/famili.png" alt="Family Right" class="hero-img hero-img-right">
+
     <h1>Pixel 10 Training<br><span>Bonn 2025</span></h1>
     <p class="subtitle">Erlebe Spektakuläres jeden Tag.</p>
   </div>
@@ -594,50 +647,4 @@
         if (e.target.classList.contains('btn-link')) return;
 
         const body = card.querySelector('.card-body');
-        card.classList.toggle('active');
-        
-        if (card.classList.contains('active')) {
-          body.style.maxHeight = body.scrollHeight + "px";
-        } else {
-          body.style.maxHeight = 0;
-        }
-      });
-    });
-
-    // Form Submission Logic for External Hosting (GitHub)
-    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const btn = this.querySelector('.btn-submit');
-      const originalText = btn.innerText;
-      btn.innerText = 'Sende...';
-      btn.disabled = true;
-
-      const formData = {
-        rating: this.rating.value,
-        feedback: this.feedback.value
-      };
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', 
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(() => {
-        // Da wir 'no-cors' nutzen, gehen wir davon aus, dass es geklappt hat,
-        // wenn kein Netzwerkfehler auftritt.
-        document.getElementById('feedbackForm').style.display = 'none';
-        document.getElementById('successMessage').style.display = 'block';
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        btn.innerText = 'Fehler. Bitte erneut versuchen.';
-        btn.disabled = false;
-      });
-    });
-  </script>
-</body>
-</html>
+        card.classList.toggle(
